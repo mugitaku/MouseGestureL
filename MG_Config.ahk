@@ -3,7 +3,7 @@ MG_8Dir=0
 MG_ActiveAsTarget=0
 MG_Interval=20
 MG_AlwaysHook=0
-MG_PrvntCtxtMenu=0
+MG_PrvntCtxtMenu=1
 MG_Threshold=15
 MG_LongThresholdX=800
 MG_LongThresholdY=600
@@ -84,50 +84,8 @@ MG_FoldTarget=0
 MG_DisableWarning=0
 MG_ActvtExclud := []
 MG_MaxLength=6
-MG_Triggers=LB_RB
-MG_SubTriggers=WU_WD
-
-
-Goto, MG_LB_End
-
-MG_LB_Enable:
-	if (!MG_AlwaysHook) {
-		MG_LB_HookEnabled := Func("MG_IsHookEnabled_LB")
-		Hotkey, If, % MG_LB_HookEnabled
-	}
-	Hotkey, *LButton, MG_LB_DownHotkey, On
-	Hotkey, *LButton up, MG_LB_UpHotkey, On
-	Hotkey, If
-	MG_LB_Enabled := 1
-return
-
-MG_LB_Disable:
-	Hotkey, *LButton, MG_LB_DownHotkey, Off
-	Hotkey, *LButton up, MG_LB_UpHotkey, Off
-	MG_LB_Enabled := 0
-return
-
-MG_LB_DownHotkey:
-	MG_TriggerDown("LB")
-return
-
-MG_LB_UpHotkey:
-	MG_TriggerUp("LB")
-return
-
-MG_LB_Down:
-	MG_SendButton("LB", "LButton", "Down")
-return
-
-MG_LB_Up:
-	MG_SendButton("LB", "LButton", "Up")
-return
-
-MG_LB_Check:
-	MG_CheckButton("LB", "LButton")
-return
-
-MG_LB_End:
+MG_Triggers=RB
+MG_SubTriggers=MB_WU_WD
 
 
 Goto, MG_RB_End
@@ -170,6 +128,52 @@ MG_RB_Check:
 return
 
 MG_RB_End:
+
+
+Goto, MG_MB_End
+
+MG_MB_Enable:
+	if (!MG_AlwaysHook) {
+		MG_MB_HookEnabled := Func("MG_IsHookEnabled_MB")
+		Hotkey, If, % MG_MB_HookEnabled
+	}
+	Hotkey, *MButton, MG_MB_DownHotkey, On
+	Hotkey, *MButton up, MG_MB_UpHotkey, On
+	Hotkey, If
+	MG_MB_Enabled := 1
+return
+
+MG_MB_Disable:
+	Hotkey, *MButton, MG_MB_DownHotkey, Off
+	Hotkey, *MButton up, MG_MB_UpHotkey, Off
+	MG_MB_Enabled := 0
+return
+
+MG_MB_DownHotkey:
+	MG_TriggerDown("MB")
+return
+
+MG_MB_UpHotkey:
+	MG_TriggerUp("MB")
+return
+
+MG_MB_Down:
+	if (!MG_DisableDefMB) {
+		MG_SendButton("MB", "MButton", "Down")
+	}
+return
+
+MG_MB_Up:
+	if (!MG_DisableDefMB) {
+		MG_SendButton("MB", "MButton", "Up")
+	}
+return
+
+MG_MB_Check:
+	MG_CheckButton("MB", "MButton")
+return
+
+MG_MB_End:
 
 
 Goto, MG_WU_End
@@ -277,45 +281,19 @@ return
 
 MG_Gesture_RB_L_:
 	if (!MG_IsExDefault()) {
-		;Back
-		Send, !{Left}
-	}
-return
-
-MG_GetAction_RB_L_:
-	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Back"
-	}
-return
-
-MG_Gesture_RB_R_:
-	if (!MG_IsExDefault()) {
-		;Forward
-		Send, !{Right}
-	}
-return
-
-MG_GetAction_RB_R_:
-	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Forward"
-	}
-return
-
-MG_Gesture_RB_U_:
-	if (!MG_IsExDefault()) {
 		;previous tab
 		Send, +^{Tab}
 		
 	}
 return
 
-MG_GetAction_RB_U_:
+MG_GetAction_RB_L_:
 	if (!MG_IsExDefault()) {
 		MG_ActionStr := "previous tab"
 	}
 return
 
-MG_Gesture_RB_D_:
+MG_Gesture_RB_R_:
 	if (!MG_IsExDefault()) {
 		;next tab
 		Send, ^{Tab}
@@ -323,95 +301,56 @@ MG_Gesture_RB_D_:
 	}
 return
 
-MG_GetAction_RB_D_:
+MG_GetAction_RB_R_:
 	if (!MG_IsExDefault()) {
 		MG_ActionStr := "next tab"
 	}
 return
 
+MG_Gesture_RB_U_:
+	if (!MG_IsExDefault()) {
+		;Top
+		Send, ^{Home}
+		
+		
+	}
+return
+
+MG_GetAction_RB_U_:
+	if (!MG_IsExDefault()) {
+		MG_ActionStr := "Top"
+	}
+return
+
+MG_Gesture_RB_D_:
+	if (!MG_IsExDefault()) {
+		;Bottom
+		Send, ^{End}
+		
+	}
+return
+
+MG_GetAction_RB_D_:
+	if (!MG_IsExDefault()) {
+		MG_ActionStr := "Bottom"
+	}
+return
+
 MG_Gesture_RB_LU_:
 	if (!MG_IsExDefault()) {
-		;Copy
-		Send, ^c
+		;Zoom in
+		Send, +^{+}
 		
 	}
 return
 
 MG_GetAction_RB_LU_:
 	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Copy"
+		MG_ActionStr := "Zoom in"
 	}
 return
 
 MG_Gesture_RB_LD_:
-	if (!MG_IsExDefault()) {
-		;Paste
-		Send, ^v
-		
-	}
-return
-
-MG_GetAction_RB_LD_:
-	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Paste"
-	}
-return
-
-MG_Gesture_RB_RU_:
-	if (!MG_IsExDefault()) {
-		;Close
-		Send, ^w
-	}
-return
-
-MG_GetAction_RB_RU_:
-	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Close"
-	}
-return
-
-MG_Gesture_RB_RD_:
-	if (!MG_IsExDefault()) {
-		;Restore tab
-		Send, +^t
-	}
-return
-
-MG_GetAction_RB_RD_:
-	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Restore tab"
-	}
-return
-
-MG_Gesture_RB_UL_:
-	if (!MG_IsExDefault()) {
-		;Reload
-		Send, ^r
-		
-	}
-return
-
-MG_GetAction_RB_UL_:
-	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Reload"
-	}
-return
-
-MG_Gesture_RB_UR_:
-	if (!MG_IsExDefault()) {
-		;Task View
-		Send, #{Tab}
-		
-	}
-return
-
-MG_GetAction_RB_UR_:
-	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Task View"
-	}
-return
-
-MG_Gesture_RB_DL_:
 	if (!MG_IsExDefault()) {
 		;Zoom out
 		Send, ^{-}
@@ -419,26 +358,127 @@ MG_Gesture_RB_DL_:
 	}
 return
 
-MG_GetAction_RB_DL_:
+MG_GetAction_RB_LD_:
 	if (!MG_IsExDefault()) {
 		MG_ActionStr := "Zoom out"
 	}
 return
 
+MG_Gesture_RB_RU_:
+	if (!MG_IsExDefault()) {
+		;Task View
+		Send, #{Tab}
+		
+	}
+return
+
+MG_GetAction_RB_RU_:
+	if (!MG_IsExDefault()) {
+		MG_ActionStr := "Task View"
+	}
+return
+
+MG_Gesture_RB_RD_:
+	if (!MG_IsExDefault()) {
+		;Reload
+		Send, ^r
+		
+	}
+return
+
+MG_GetAction_RB_RD_:
+	if (!MG_IsExDefault()) {
+		MG_ActionStr := "Reload"
+	}
+return
+
+MG_Gesture_RB_UL_:
+	if (!MG_IsExDefault()) {
+		;Close
+		Send, ^w
+		
+		
+	}
+return
+
+MG_GetAction_RB_UL_:
+	if (!MG_IsExDefault()) {
+		MG_ActionStr := "Close"
+	}
+return
+
+MG_Gesture_RB_UR_:
+	if (!MG_IsExDefault()) {
+		;Restore tab
+		Send, +^t
+		
+	}
+return
+
+MG_GetAction_RB_UR_:
+	if (!MG_IsExDefault()) {
+		MG_ActionStr := "Restore tab"
+	}
+return
+
+MG_Gesture_RB_DL_:
+	if (!MG_IsExDefault()) {
+		;Copy
+		Send, ^c
+		
+	}
+return
+
+MG_GetAction_RB_DL_:
+	if (!MG_IsExDefault()) {
+		MG_ActionStr := "Copy"
+	}
+return
+
 MG_Gesture_RB_DR_:
 	if (!MG_IsExDefault()) {
-		;Zoom in
-		Send, +^{+}
+		;Paste
+		Send, ^v
+		
 	}
 return
 
 MG_GetAction_RB_DR_:
 	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Zoom in"
+		MG_ActionStr := "Paste"
 	}
 return
 
 MG_Gesture_RB_RL_:
+	if (!MG_IsExDefault()) {
+		;Back
+		Send, !{Left}
+		
+	}
+return
+
+MG_GetAction_RB_RL_:
+	if (!MG_IsExDefault()) {
+		MG_ActionStr := "Back"
+	}
+return
+
+MG_Gesture_RB_DU_:
+	if (!MG_IsExDefault()) {
+		;Search
+		Send, ^f
+		
+		
+	}
+return
+
+MG_GetAction_RB_DU_:
+	if (!MG_IsExDefault()) {
+		MG_ActionStr := "Search"
+	}
+return
+
+MG_Gesture_RB_UD_:
 	if (!MG_IsExDefault()) {
 		;New tab
 		Send, ^t
@@ -446,56 +486,31 @@ MG_Gesture_RB_RL_:
 	}
 return
 
-MG_GetAction_RB_RL_:
+MG_GetAction_RB_UD_:
 	if (!MG_IsExDefault()) {
 		MG_ActionStr := "New tab"
 	}
 return
 
-MG_Gesture_RB_DU_:
-	if (!MG_IsExDefault()) {
-		;Top
-		Send, ^{Home}
-	}
-return
-
-MG_GetAction_RB_DU_:
-	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Top"
-	}
-return
-
-MG_Gesture_RB_UD_:
-	if (!MG_IsExDefault()) {
-		;Bottom
-		Send, ^{End}
-	}
-return
-
-MG_GetAction_RB_UD_:
-	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Bottom"
-	}
-return
-
 MG_Gesture_RB_LR_:
 	if (!MG_IsExDefault()) {
-		;search
-		Send, ^f
+		;Forward
+		Send, !{Right}
+		
 		
 	}
 return
 
 MG_GetAction_RB_LR_:
 	if (!MG_IsExDefault()) {
-		MG_ActionStr := "search"
+		MG_ActionStr := "Forward"
 	}
 return
 
 MG_Gesture_RB_WU_:
 	if (!MG_IsExDefault()) {
 		;previous tab
-		Send, +^{Tab}
+		Send, +^g
 		
 	}
 return
@@ -509,7 +524,7 @@ return
 MG_Gesture_RB_WD_:
 	if (!MG_IsExDefault()) {
 		;next tab
-		Send, ^{Tab}
+		Send, ^g
 		
 	}
 return
@@ -520,43 +535,30 @@ MG_GetAction_RB_WD_:
 	}
 return
 
-MG_Gesture_LB_RB_:
+MG_Gesture_RB_MB_:
 	if (!MG_IsExDefault()) {
-		;Forward
-		Send, !{Right}
+		;Enter
+		Send, {Enter}
+		
 	}
 return
 
-MG_GetAction_LB_RB_:
+MG_GetAction_RB_MB_:
 	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Forward"
+		MG_ActionStr := "Enter"
 	}
 return
 
-MG_Gesture_RB_LB_:
-	if (!MG_IsExDefault()) {
-		;Back
-		Send, !{Left}
-	}
-return
-
-MG_GetAction_RB_LB_:
-	if (!MG_IsExDefault()) {
-		MG_ActionStr := "Back"
-	}
-return
-
-
-MG_IsHookEnabled_LB() {
-	global
-	MG_TriggerCount ? : MG_GetMousePosInfo()
-	return (MG_LB_Enabled && (MG_TriggerCount || (!MG_IsDisable())))
-}
 
 MG_IsHookEnabled_RB() {
 	global
 	MG_TriggerCount ? : MG_GetMousePosInfo()
 	return (MG_RB_Enabled && (MG_TriggerCount || (!MG_IsDisable())))
+}
+
+MG_IsHookEnabled_MB() {
+	global
+	return (MG_MB_Enabled && MG_TriggerCount)
 }
 
 MG_IsHookEnabled_WU() {
